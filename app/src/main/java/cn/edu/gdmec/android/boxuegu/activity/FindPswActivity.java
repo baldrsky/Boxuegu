@@ -36,7 +36,13 @@ public class FindPswActivity extends AppCompatActivity {
         final TextView tv_reset_psw = (TextView) findViewById(R.id.tv_reset_psw);
         final EditText et_user_name = (EditText) findViewById(R.id.et_user_name);
         TextView tv_user_name = (TextView) findViewById(R.id.tv_user_name);
-
+        TextView tv_back = (TextView) findViewById(R.id.tv_back);
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FindPswActivity.this.finish();
+            }
+        });
 
         if ("security".equals(from)){
             tv_main_title.setText("设置密保");
