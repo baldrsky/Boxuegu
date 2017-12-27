@@ -69,8 +69,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }else  if (TextUtils.isEmpty(pswAgain)){
                     Toast.makeText(RegisterActivity.this,"请再次输入密码",Toast.LENGTH_LONG).show();
                     return;
-                }else if (!et_pwd.equals(pswAgain)){
-                    Toast.makeText(RegisterActivity.this,"请输入两次的密码不一样",Toast.LENGTH_LONG).show();
+                }else if (!psw.equals(pswAgain)){
+                    Toast.makeText(RegisterActivity.this,"两次的密码不一样",Toast.LENGTH_LONG).show();
                     return;
                 }else if (isExistUserName(userName)){
                     Toast.makeText(RegisterActivity.this,"此账户名已经存在",Toast.LENGTH_LONG).show();
@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("loginInfo",MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();//获取sp的编辑器
         //userName作为Key，密码作为value
-        editor.putString(userName,psw);
+        editor.putString(userName,md5Psw);
         editor.commit();//提交修改
     }
 
@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
     */
     private void getEditString() {
         userName = et_user_name.getText().toString().trim();
-        psw = et_pwd.getText().toString();
+        psw = et_pwd.getText().toString().trim();
         pswAgain = et_pwd_again.getText().toString().trim();
     }
 }
