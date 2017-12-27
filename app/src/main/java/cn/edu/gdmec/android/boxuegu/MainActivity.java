@@ -1,5 +1,8 @@
 package cn.edu.gdmec.android.boxuegu;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +16,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.edu.gdmec.android.boxuegu.view.ExercisesView;
+import cn.edu.gdmec.android.boxuegu.view.MyInfoView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data!=null){
+            boolean isLogin = data.getBooleanExtra("isLogin",false);
+            if (isLogin){//登录成功后显示课程界面
+                clearBottomImageState();
+                selectDisplayView(0);
+            }
+            if (mMyInfoView!=null){
+                 mMyInfoView.setLoginParams(isLogin);
+            }
+        }
+    }
 
     private TextView tv_back;
     private TextView tv_main_title;
@@ -134,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private ExercisesView mExercisesView;
+    private MyInfoView mMyInfoView;
     //选择视图
     private void createView(int viewindex) {
         switch (viewindex){
@@ -149,6 +169,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mExercisesView.showView();
                 break;
             case 2:
+                if (mMyInfoView == null){
+                    mMyInfoView = new MyInfoView(this);
+                    mBodyLayout.addView(mMyInfoView.getView());
+                }else{
+                    mMyInfoView.getView();
+                }
+                mMyInfoView.showView();
                 break;
         }
     }
@@ -182,10 +209,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 exitTime = System.currentTimeMillis();
             }else{
                 MainActivity.this.finish();
-                /*if (readLoginStatus()){
+                if (readLoginStatus()){
                     //已登陆的话，清除登陆状态
                     clearLoginStatus();
-                }*/
+                }
                 System.exit(0);
             }
             return true;
@@ -193,18 +220,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onKeyDown(keyCode, event);
     }
     //清除登陆状态
-    /*private void clearLoginStatus() {
+    private void clearLoginStatus() {
         SharedPreferences sp = getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();//获取编辑器
         editor.putBoolean("isLogin",false);//清除登陆状态
         editor.putString("loginUserName","");//清除登陆名
         editor.commit();//提交修改
-    }*/
+    }
 
     //登陆状态
-    /*private boolean readLoginStatus() {
+    private boolean readLoginStatus() {
         SharedPreferences sp = getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         boolean isLogin = sp.getBoolean("isLogin",false);
         return isLogin;
-    }*/
+    }
 }

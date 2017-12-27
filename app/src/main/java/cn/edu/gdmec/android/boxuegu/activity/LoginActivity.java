@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.gdmec.android.boxuegu.MainActivity;
 import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 
@@ -90,7 +91,10 @@ public class LoginActivity extends AppCompatActivity {
                     Intent data = new Intent();
                     data.putExtra("isLogin",true);
                     setResult(RESULT_OK,data);
-                    LoginActivity.this.finish();
+                    //跳转到主页
+                    /*LoginActivity.this.finish();
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);*/
                     return;
                 }else if (!TextUtils.isEmpty(spPsw) && !md5Psw.equals(spPsw)){
                     Toast.makeText(LoginActivity.this,"输入的用户名和密码不一致",Toast.LENGTH_LONG).show();
