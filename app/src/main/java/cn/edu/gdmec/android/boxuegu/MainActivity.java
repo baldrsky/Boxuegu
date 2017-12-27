@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.gdmec.android.boxuegu.view.CourseView;
 import cn.edu.gdmec.android.boxuegu.view.ExercisesView;
 import cn.edu.gdmec.android.boxuegu.view.MyInfoView;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 selectDisplayView(0);
             }
             if (mMyInfoView!=null){
-                 mMyInfoView.setLoginParams(isLogin);
+                mMyInfoView.setLoginParams(isLogin);
             }
         }
     }
@@ -152,13 +153,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-
+    private CourseView mCourseView;
     private ExercisesView mExercisesView;
     private MyInfoView mMyInfoView;
     //选择视图
     private void createView(int viewindex) {
         switch (viewindex){
             case 0:
+                if (mCourseView == null){
+                    mCourseView = new CourseView(this);
+                    mBodyLayout.addView(mCourseView.getView());
+                }else{
+                    mCourseView.getView();
+                }
+                mCourseView.showView();
                 break;
             case 1:
                 if (mExercisesView == null){
