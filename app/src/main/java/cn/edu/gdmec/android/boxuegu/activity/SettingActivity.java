@@ -9,14 +9,19 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.zip.Deflater;
+
 import cn.edu.gdmec.android.boxuegu.R;
 
 public class SettingActivity extends AppCompatActivity {
+
+    public static SettingActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        instance = this;
         init();
     }
 
@@ -43,6 +48,8 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                //TODO:跳转到修改密码的界面
+                Intent intent = new Intent(SettingActivity.this,ModifyPswActivity.class);
+                startActivity(intent);
             }
         });
 
