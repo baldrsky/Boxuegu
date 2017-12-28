@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.bean.ExercisesBean;
+import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 
 /**
  * Created by student on 17/12/26.
@@ -90,10 +91,12 @@ public class ExercisesDetailAdapter extends BaseAdapter {
             vh.iv_b.setImageResource(R.drawable.exercises_b);
             vh.iv_c.setImageResource(R.drawable.exercises_c);
             vh.iv_d.setImageResource(R.drawable.exercises_d);
+            AnalysisUtils.setABCDEnable(true,vh.iv_a,vh.iv_b,vh.iv_c,vh.iv_d);
         }else{
+            AnalysisUtils.setABCDEnable(false,vh.iv_a,vh.iv_b,vh.iv_c,vh.iv_d);
             switch (bean.select){
                 case 0:
-                    //用户选对了的情况 A
+                    //用户选对了的情况
                     if (bean.answer == 1){
                         vh.iv_a.setImageResource(R.drawable.exercises_right_icon);
                         vh.iv_b.setImageResource(R.drawable.exercises_b);
@@ -168,7 +171,7 @@ public class ExercisesDetailAdapter extends BaseAdapter {
                     }
                     break;
                 case 4:
-                    //用户选错了的情况C
+                    //用户选错了的情况D
                     vh.iv_d.setImageResource(R.drawable.exercises_error_icon);
                     if (bean.answer == 1){
                         vh.iv_a.setImageResource(R.drawable.exercises_right_icon);
@@ -235,7 +238,7 @@ public class ExercisesDetailAdapter extends BaseAdapter {
         vh.iv_d.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //判断用户是否做过做过题
+                //判断用户是否做过这道题
                 if (selectedPosition.contains("" + position)){
                     selectedPosition.remove("" + position);
                 }else{

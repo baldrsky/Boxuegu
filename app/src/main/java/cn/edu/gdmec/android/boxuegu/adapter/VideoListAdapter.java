@@ -30,7 +30,7 @@ public class VideoListAdapter extends BaseAdapter {
         this.onSelectListener = onSelectListener;
     }
 
-    public VideoListAdapter(int position){
+    public void setSelectedPosition(int position){
         this.selectedPosition = position;
     }
 

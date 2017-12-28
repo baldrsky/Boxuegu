@@ -1,6 +1,7 @@
 package cn.edu.gdmec.android.boxuegu.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.edu.gdmec.android.boxuegu.R;
+import cn.edu.gdmec.android.boxuegu.activity.VideoListActivity;
 import cn.edu.gdmec.android.boxuegu.bean.CourseBean;
 
 /**
@@ -80,6 +82,10 @@ public class CourseAdapter extends BaseAdapter{
                             @Override
                             public void onClick(View v) {
                                 //跳转
+                                Intent intent = new Intent(context, VideoListActivity.class);
+                                intent.putExtra("id",bean.id);
+                                intent.putExtra("intro",bean.intro);
+                                context.startActivity(intent);
                             }
                         });
                         break;
@@ -91,6 +97,10 @@ public class CourseAdapter extends BaseAdapter{
                             @Override
                             public void onClick(View v) {
                                 //跳转
+                                Intent intent = new Intent(context, VideoListActivity.class);
+                                intent.putExtra("id",bean.id);
+                                intent.putExtra("intro",bean.intro);
+                                context.startActivity(intent);
                             }
                         });
                         break;

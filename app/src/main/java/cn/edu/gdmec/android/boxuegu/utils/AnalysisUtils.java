@@ -19,6 +19,7 @@ import cn.edu.gdmec.android.boxuegu.bean.ExercisesBean;
  */
 
 public class AnalysisUtils {
+
     public static String readLoginUserName(Context context){
         SharedPreferences sp = context.getSharedPreferences("loginInfo",Context.MODE_PRIVATE);
         String userName = sp.getString("loginUserName","");
