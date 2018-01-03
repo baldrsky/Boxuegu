@@ -13,11 +13,15 @@ import android.widget.VideoView;
 
 import cn.edu.gdmec.android.boxuegu.R;
 
+import static cn.edu.gdmec.android.boxuegu.R.raw.beyond;
+import static cn.edu.gdmec.android.boxuegu.R.raw.video11;
+
 public class VideoPlayActivity extends AppCompatActivity {
 
     private VideoView videoView;
     private String videoPath;
     private int position;
+    private String uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,11 @@ public class VideoPlayActivity extends AppCompatActivity {
             Toast.makeText(this,"本地没有此视频，暂时无法播放",Toast.LENGTH_SHORT).show();
             return;
         }
-        String uri = "android.resource://" + getPackageName() + "/" + R.raw.video11;
+        if (videoPath.equals("beyond.mp4")){
+            uri = "android.resource://" + getPackageName() + "/" + R.raw.beyond;
+        }else {
+            uri = "android.resource://" + getPackageName() + "/" + R.raw.video11;
+        }
         videoView.setVideoPath(uri);
         videoView.start();
     }
