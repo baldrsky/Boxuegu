@@ -2,12 +2,15 @@ package cn.edu.gdmec.android.boxuegu.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +19,7 @@ import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.bean.UserBean;
 import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 import cn.edu.gdmec.android.boxuegu.utils.DBUtils;
+import cn.edu.gdmec.android.boxuegu.utils.ImageUtils;
 
 import static cn.edu.gdmec.android.boxuegu.R.id.tv_back;
 
@@ -32,17 +36,21 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private RelativeLayout rl_signature;
     private TextView tv_signature;
     private String spUserName ;
+    private RelativeLayout rl_head;
 
 
     private  static final  int CHANGE_NICKNAME = 1;
     private  static final  int CHANGE_SIGNATURE = 2;
     private String new_info;
+    private ImageView iv_head_icon;
+    private ImageUtils imageUtils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        //上一章的
+        //上一章
         spUserName = AnalysisUtils.readLoginUserName(this);
         init();
         initDate();
@@ -60,6 +68,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         rl_nickName.setOnClickListener(this);
         rl_sex.setOnClickListener(this);
         rl_signature.setOnClickListener(this);
+        rl_head.setOnClickListener(this);
 
     }
 
@@ -92,6 +101,10 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         tv_back = (TextView) findViewById(R.id.tv_back);
         tv_main_title = (TextView) findViewById(R.id.tv_main_title);
         tv_main_title.setText("个人资料");
+
+        rl_head = (RelativeLayout) findViewById(R.id.rl_head);
+        iv_head_icon = (ImageView) findViewById(R.id.iv_head_icon);
+
         rl_title_bar = (RelativeLayout) findViewById(R.id.title_bar);
         rl_title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
 
@@ -116,6 +129,9 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()){
             case R.id.tv_back:
                 this.finish();
+                break;
+            case R.id.rl_head://头像
+                chooseDialog();
                 break;
             case  R.id.rl_nickName://昵称的点击事件
 
@@ -174,6 +190,39 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
 
                 }
                 break;
+            case ImageUtils.ACTIVITY_RESULT_CAMERA: // 拍照
+                try {
+                    if (resultCode == -1) {
+                        imageUtils.cutImageByCamera();
+                    } else {
+                        // 因为在无任何操作返回时，系统依然会创建一个文件，这里就是删除那个产生的文件
+                        if (imageUtils.picFile != null) {
+                            imageUtils.picFile.delete();
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case ImageUtils.ACTIVITY_RESULT_ALBUM:
+                try {
+                    if (resultCode == -1) {
+                        Bitmap bm_icon = imageUtils.decodeBitmap();
+                        if (bm_icon != null) {
+                            iv_head_icon.setImageBitmap(bm_icon);
+                        }
+                    } else {
+                        // 因为在无任何操作返回时，系统依然会创建一个文件，这里就是删除那个产生的文件
+                        if (imageUtils.picFile != null) {
+                            imageUtils.picFile.delete();
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 break;
         }
@@ -211,6 +260,35 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         tv_sex.setText(sex);
         //更新数据库中字段
         DBUtils.getInstance(this).updateUserInfo("sex",sex,spUserName);
+
+    }
+
+
+    //选择头像
+    private void chooseDialog() {
+        imageUtils = new ImageUtils(this);
+        new AlertDialog.Builder(this)//
+                .setTitle("选择头像")//
+                .setNegativeButton("相册", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                        imageUtils.byAlbum();
+                    }
+                })
+
+                .setPositiveButton("拍照", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String status = Environment.getExternalStorageState();
+                        if (status.equals(Environment.MEDIA_MOUNTED)) {//判断是否存在SD卡
+                            imageUtils.byCamera();
+                        }
+
+                    }
+                }).show();
 
     }
 }
