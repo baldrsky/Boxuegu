@@ -27,6 +27,11 @@ public class AnalysisUtils {
     }
 
 
+    public static boolean readLoginStatus(Context context){
+        SharedPreferences sp =context.getSharedPreferences("loginInfo",Context.MODE_APPEND);
+        boolean isLogin = sp.getBoolean("isLogin",false);
+        return isLogin;
+    }
     public static List<ExercisesBean> getExercisesInfos(InputStream is) throws  Exception{
         XmlPullParser parser = Xml.newPullParser();
         parser.setInput(is, "utf-8");

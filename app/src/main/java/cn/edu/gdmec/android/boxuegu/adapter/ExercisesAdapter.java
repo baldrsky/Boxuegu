@@ -7,12 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.activity.ExercisesDetailActivity;
+import cn.edu.gdmec.android.boxuegu.activity.LoginActivity;
+import cn.edu.gdmec.android.boxuegu.activity.VideoListActivity;
 import cn.edu.gdmec.android.boxuegu.bean.ExercisesBean;
+import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 
 /**
  * Created by ASUS PRO on 2017/12/25.
@@ -77,10 +81,15 @@ public class ExercisesAdapter extends BaseAdapter {
                     return;
                 }
                 //跳转到详情页
-                Intent intent = new Intent(mContext, ExercisesDetailActivity.class);
-                intent.putExtra("id",bean.id);
-                intent.putExtra("title",bean.title);
-                mContext.startActivity(intent);
+                if (AnalysisUtils.readLoginStatus(mContext)){
+                    Intent intent = new Intent(mContext, ExercisesDetailActivity.class);
+                    intent.putExtra("id",bean.id);
+                    mContext.startActivity(intent);
+                }else{
+                    Toast.makeText(mContext,"您还未登陆，请先登陆",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    mContext.startActivity(intent);
+                }
             }
         });
         return convertView;

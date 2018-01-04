@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import cn.edu.gdmec.android.boxuegu.R;
+import cn.edu.gdmec.android.boxuegu.activity.LoginActivity;
 import cn.edu.gdmec.android.boxuegu.activity.VideoListActivity;
 import cn.edu.gdmec.android.boxuegu.bean.CourseBean;
+import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 
 /**
  * Created by student on 17/12/27.
@@ -82,10 +85,16 @@ public class CourseAdapter extends BaseAdapter{
                             @Override
                             public void onClick(View v) {
                                 //跳转
-                                Intent intent = new Intent(context, VideoListActivity.class);
-                                intent.putExtra("id",bean.id);
-                                intent.putExtra("intro",bean.intro);
-                                context.startActivity(intent);
+                                if (AnalysisUtils.readLoginStatus(context)){
+                                    Intent intent = new Intent(context, VideoListActivity.class);
+                                    intent.putExtra("id",bean.id);
+                                    intent.putExtra("intro",bean.intro);
+                                    context.startActivity(intent);
+                                }else{
+                                    Toast.makeText(context,"您还未登陆，请先登陆",Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(context, LoginActivity.class);
+                                    context.startActivity(intent);
+                                }
                             }
                         });
                         break;
@@ -97,10 +106,16 @@ public class CourseAdapter extends BaseAdapter{
                             @Override
                             public void onClick(View v) {
                                 //跳转
-                                Intent intent = new Intent(context, VideoListActivity.class);
-                                intent.putExtra("id",bean.id);
-                                intent.putExtra("intro",bean.intro);
-                                context.startActivity(intent);
+                                if (AnalysisUtils.readLoginStatus(context)){
+                                    Intent intent = new Intent(context, VideoListActivity.class);
+                                    intent.putExtra("id",bean.id);
+                                    intent.putExtra("intro",bean.intro);
+                                    context.startActivity(intent);
+                                }else{
+                                    Toast.makeText(context,"您还未登陆，请先登陆",Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(context, LoginActivity.class);
+                                    context.startActivity(intent);
+                                }
                             }
                         });
                         break;
