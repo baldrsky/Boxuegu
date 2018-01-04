@@ -1,18 +1,26 @@
 package cn.edu.gdmec.android.boxuegu.utils;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cn.edu.gdmec.android.boxuegu.MainActivity;
 import cn.edu.gdmec.android.boxuegu.activity.UserInfoActivity;
@@ -33,6 +41,9 @@ public class ImageUtils {
     public File picFile;// 图片文件
 
     private Context context;
+    private File tempFile;
+
+    private Uri imageUri;
 
     // 构造方法
     public ImageUtils(Context context) {
@@ -73,8 +84,45 @@ public class ImageUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*//獲取系統版本
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        // 激活相机
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // 判断存储卡是否可以用，可用进行存储
+        if (hasSdcard()) {
+            SimpleDateFormat timeStampFormat = new SimpleDateFormat(
+                    "yyyy_MM_dd_HH_mm_ss");
+            String filename = timeStampFormat.format(new Date());
+            tempFile = new File(Environment.getExternalStorageDirectory(),
+                    filename + ".jpg");
+            if (currentapiVersion < 24) {
+                // 从文件中创建uri
+                imageUri = Uri.fromFile(tempFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            } else {
+                //兼容android7.0 使用共享文件的形式
+                ContentValues contentValues = new ContentValues(1);
+                contentValues.put(MediaStore.Images.Media.DATA, tempFile.getAbsolutePath());
+                //检查是否有存储权限，以免崩溃
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //申请WRITE_EXTERNAL_STORAGE权限
+                    Toast.makeText(context,"请开启存储权限",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                imageUri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            }
+        }
+        // 开启一个带有返回值的Activity，请求码为PHOTO_REQUEST_CAREMA
+        ((UserInfoActivity) context).startActivityForResult(intent, ACTIVITY_RESULT_CAMERA);*/
+
     }
 
+    public static boolean hasSdcard() {
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
+    }
     // 选择相册的方式
     public void byAlbum() {
         try {
@@ -112,8 +160,8 @@ public class ImageUtils {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         //设定剪裁图片宽高
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
+        intent.putExtra("outputX", 40);
+        intent.putExtra("outputY", 40);
 
         intent.putExtra("noFaceDetection", true);
         intent.putExtra("scale", true);
@@ -137,7 +185,7 @@ public class ImageUtils {
         intent.putExtra("return-data", false);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true);
-        ((MainActivity) context).startActivityForResult(intent,
+        ((UserInfoActivity) context).startActivityForResult(intent,
                 ACTIVITY_RESULT_ALBUM);
     }
 
